@@ -1,16 +1,19 @@
-# pip3 install marko bottle
-import os, html, re, marko
+import os, html, re
 from datetime import date
 from bottle import *
+
+config = {
+    "title": "Daniel's Stuff",
+    "domain": "https://petabyt.dev/blog",
+    "desc": "This is the place where I put stuff",
+    "port": 7000
+}
 
 def getIndex():
     fp = open("index.html", "r")
     index = fp.read()
     fp.close()
     return index
-
-def getMatch(a):
-    return a.groups(0)[0]
 
 def sanitizeTitle(title):
     title = title.lower()
@@ -21,6 +24,10 @@ def sanitizeTitle(title):
 
 # Parse as tbmd, a very special version of markdown
 # return url, date, text
+# Parsing format:
+#  :custom-url-title
+#  My Thing
+#  June 1 2021
 def parse(text, showMore):
     url = ""
     dateStr = ""
@@ -56,6 +63,7 @@ def parse(text, showMore):
 
     text = html.escape(text)
 
+    # Parse "---" as a show more link
     if showMore:
         text = text.replace("---", "<hr>")
     else:
@@ -63,8 +71,6 @@ def parse(text, showMore):
 
     text = re.sub(r"## (.+)", r"<h2>\1</h2>", text)
     text = re.sub(r"# (.+)", r"<h1>\1</h1>", text)
-
-    inBetween = "([^\n|\[\]\(\)]+)";
 
     # Images
     text = re.sub(r"\!\[([^\n|\[\]\(\)]+)\]\(([^\n|\[\]\(\)]+)\)",
@@ -90,6 +96,7 @@ def parse(text, showMore):
 
     return url, title, dateStr, text
 
+# Get a list of posts
 def getPosts():
     content = ""
     files = os.listdir("posts/")
@@ -99,7 +106,7 @@ def getPosts():
         post = fp.read()
         fp.close()
 
-        if post[0:5] == ":skip":
+        if post[:5] == ":skip":
             continue
 
         url, title, dateStr, post = parse(post, False)
@@ -107,6 +114,7 @@ def getPosts():
         content += "<div class='post' title='Post #" + str(i) + "'>" + post + "</div>"
     return content
 
+# Get a single post
 def getPost(name):
     content = ""
     files = os.listdir("posts/")
@@ -116,7 +124,7 @@ def getPost(name):
         post = fp.read()
         fp.close()
 
-        if post[0:5] == ":skip":
+        if post[:5] == ":skip":
             continue
 
         url, title, dateStr, post = parse(post, True)
@@ -124,6 +132,9 @@ def getPost(name):
             return title, "<div class='post' title='Post #" + str(i) + "'>" + post + "</div>"
     return "Post not found", "<p class='center'>Post not found.</p>"
 
+# Everything having to do with getPostByID() is
+# meant to keep compatibility with the old version.
+# If you are using it new, remove it.
 def getPostByID(num):
     content = ""
 
@@ -137,14 +148,22 @@ def getPostByID(num):
     post = fp.read()
     fp.close()
 
-    if post[0:5] == ":skip":
+    if post[:5] == ":skip":
         return "404"
 
     url, title, dateStr, post = parse(post, True)
     return url
 
+# Route legacy index.php
+@route("/index.php")
+def main():
+    if request.params.get('post') is not None:
+        redirect(getPostByID(request.query["post"]))
+    redirect("/")
+
 @route("/")
 def main():
+    # parse index ?post=x
     if request.params.get('post') is not None:
         redirect(getPostByID(request.query["post"]))
 
@@ -153,13 +172,6 @@ def main():
         posts=getPosts(),
         title="Daniel's 'Stuff'"
     )
-
-@route("/index.php")
-def main():
-    if request.params.get('post') is not None:
-        redirect(getPostByID(request.query["post"]))
-    redirect("/")
-
 
 @route("/<post>")
 def post(post):
@@ -172,18 +184,14 @@ def post(post):
 
 @route("/rss.xml")
 def rss():
-    domain = "https://petabyt.dev/blog"
-    title = "Daniel's Blog"
-    desc = "This is the place where I put stuff"
-
     response.content_type = "text/xml; charset=utf-8"
 
     content = """<?xml version="1.0" encoding="UTF-8"?>
     <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
         <channel>
-          <title>""" + title + """</title>
-            <link>""" + domain + """</link>
-            <description>""" + desc + """</description>
+          <title>""" + config.title + """</title>
+            <link>""" + config.domain + """</link>
+            <description>""" + config.desc + """</description>
             <generator>Tinyblog</generator>
             <language>en</language>
             <lastBuildDate>""" + date.today().strftime("%Y-%m-%d") + """</lastBuildDate>
@@ -196,7 +204,7 @@ def rss():
         post = fp.read()
         fp.close()
 
-        if post[0:5] == ":skip":
+        if post[:5] == ":skip":
             continue
 
         url, title, dateStr, post = parse(post, False)
@@ -212,9 +220,5 @@ def rss():
     </rss>
     """
     return content
-
-@route("/image")
-def post(post):
-    redirect("")
 
 run(host='localhost', port=7000)
