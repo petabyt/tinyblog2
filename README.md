@@ -3,6 +3,9 @@ See the original [tinyblog](https://github.com/petabyt/tinyblog)
 After some PHP + Google indexing issues, I've decided to rewrite  
 Tinyblog in Python.
 
+This is meant to be a drop in upgrade for the old tinyblog, keeping
+compatibility with everything.
+
 I didn't keep line count in mind this time, although I kept it  
 fairly small. I could have done better if it weren't for my picky  
 markdown parsing.
