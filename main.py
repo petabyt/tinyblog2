@@ -170,7 +170,8 @@ def main():
     return template(
         getIndex(),
         posts=getPosts(),
-        title="Daniel's 'Stuff'"
+        title=config.title,
+        header=config.title
     )
 
 @route("/<post>")
@@ -179,7 +180,8 @@ def post(post):
     return template(
         getIndex(),
         posts=content,
-        title=title
+        title=title,
+        header=config.title
     )
 
 @route("/rss.xml")
