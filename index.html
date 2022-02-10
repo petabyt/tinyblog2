@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{title}}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body, html {
+			font-family: sans-serif;
+			color: #333;
+		}
+
+		.post {
+			background-color: #f0f0f0;
+			padding: 5px 5px;
+			margin-bottom: 20px;
+			width: 70%;
+			margin: auto;
+			margin-bottom: 20px;
+		}
+
+		@media only screen and (max-width: 600px) {
+			.post {
+				width: 100%;
+			}
+		}
+
+		.post h1, h2 {
+			margin: 0px;
+		}
+
+		.header {
+			text-align: center;
+			margin-bottom: 10px;
+		}
+		
+		.center {
+		    text-align: center;
+		}
+
+		.header h1 {
+			margin-bottom: 0px;
+		}
+
+		code {
+			background: #d5e1e6;
+			margin: 2px;
+			overflow-x: scroll;
+			padding: 3px;
+		}
+
+		.long {
+			display: block;
+			padding: 10px;
+			margin: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<a href="."><h1>Daniel's Stuff</h1></a>
+		<a href="rss.xml">RSS</a><br>
+	</div>
+	{{!posts}}
+</body>
+</html>
