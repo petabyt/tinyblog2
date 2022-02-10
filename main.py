@@ -62,6 +62,9 @@ def parse(text, showMore):
     text = text[offset:]
 
     text = html.escape(text)
+    
+    text = text.replace("\\`", "&#96;")
+    text = text.replace("\\*", "&#42;")
 
     # Parse "---" as a show more link
     if showMore:
