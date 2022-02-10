@@ -1,5 +1,7 @@
 # tinyblog2
-See the original [tinyblog](https://github.com/petabyt/tinyblog)  
+- See the original tinyblog: https://github.com/petabyt/tinyblog
+- Personal fork of this: https://code.theres.life/p/blog/
+
 After some PHP + Google indexing issues, I've decided to rewrite  
 Tinyblog in Python.
 
