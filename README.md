@@ -12,7 +12,7 @@ stuff keeping compatibility.
 
 The main change is the post URL. Instead of `?post=50`, posts are  
 loaded in by a title, like:  
-https://petabyt.dev/blog/tiny-embedded-module-system-spec  
+https://danielc.dev/blog/tiny-embedded-module-system-spec  
 This fixes several search engine indexing issues, which tend to  
 index the same post at both "index.php?post=" and "/?post=".  
 
