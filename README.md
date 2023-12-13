@@ -1,6 +1,6 @@
 # tinyblog2
 - See the original tinyblog: https://github.com/petabyt/tinyblog
-- Personal fork of this: [https://code.theres.life/p/blog/](https://github.com/petabyt/petabyt.github.io/blob/master/main.py)
+- Personal fork of this: https://github.com/petabyt/petabyt.github.io/blob/master/main.py
 
 After some PHP + Google indexing issues, I've decided to rewrite  
 Tinyblog in Python.
